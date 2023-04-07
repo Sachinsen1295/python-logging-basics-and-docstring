@@ -11,6 +11,16 @@ plt.style.use("fivethirtyeight")
 
 
 def prepare_date(df, target_col ="y"):
+    """it returns Label and Independent features
+
+    Args:
+        df (pd.Dataframe): This is the DataFrame
+        target_col (str, optional): label column name is given. Defaults to "y".
+
+    Returns:
+        tuple: label and x
+    """
+
     logging.info("Prepaing the data for training")
     X = df.drop(target_col, axis=1)
     y = df[target_col]
