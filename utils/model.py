@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import joblib 
+import logging
 
 
 
@@ -10,7 +11,7 @@ class Perceptron:
         self.weights = np.random.random(3) * 1e-4 #small random weights
         training = (eta is not None) and (epochs is not None)
         if training:
-            print(f"intial weight before training \n{self.weights}")
+            logging.info(f"intial weight before training \n{self.weights}")
 
         self.eta = eta
         self.epochs = epochs
@@ -27,25 +28,25 @@ class Perceptron:
         self.y= y
 
         X_with_bias = np.c_[self.X, -np.ones((len(self.X),1))]
-        print(f"X with bias : \n {X_with_bias}")
+        logging.info(f"X with bias : \n {X_with_bias}")
 
         for epoch in range(self.epochs):
-            print("- -"*10)
-            print(f"for eopch >> {epoch}")
-            print("- -"*10)
+            logging.info("- -"*10)
+            logging.info(f"for eopch >> {epoch}")
+            logging.info("- -"*10)
 
             z = self._z_outcome(X_with_bias,self.weights)
             y_hat = self.activation_function(z)
-            print(f"prediction value after forward pass : \n {y_hat}")
+            logging.info(f"prediction value after forward pass : \n {y_hat}")
             self.error = self.y - y_hat
-            print(f"error is \n{self.error}")
+            logging.info(f"error is \n{self.error}")
 
             # weight update
 
             self.weights = self.weights + self.eta * np.dot(X_with_bias.T, self.error)
-            print(f"updated weights after epoch {epoch}/{self.epochs} : \n{self.weights}")
+            logging.info(f"updated weights after epoch {epoch}/{self.epochs} : \n{self.weights}")
 
-            print("##"*10)
+            logging.info("##"*10)
 
 
         
@@ -57,7 +58,7 @@ class Perceptron:
 
     def total_loss(self):
         total_loss = np.sum(self.error)
-        print(f" total loss : {total_loss} \n")
+        logging.info(f" total loss : {total_loss} \n")
         return total_loss
 
     def create_dir_return_path(self,model_dir, filename):
@@ -71,6 +72,8 @@ class Perceptron:
         else:
             model_file_path = self.create_dir_return_path("model",filename)
             joblib.dump(self,model_file_path)
+
+        logging.info(f"model is save at {model_file_path}")
 
     def load(self,filepath):
         return joblib.load(filepath)
